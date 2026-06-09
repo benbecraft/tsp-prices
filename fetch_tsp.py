@@ -55,13 +55,32 @@ def fund_key(name):
     return None
 
 
+def parse_date(s):
+    """Parse a TSP date cell into a date for comparison. Handles ISO
+    (YYYY-MM-DD), US (MM/DD/YYYY), and 'Mon DD, YYYY'. Returns date.min on
+    failure so it never wins the 'most recent' pick."""
+    s = (s or "").strip().strip('"')
+    for fmt in ("%Y-%m-%d", "%m/%d/%Y", "%b %d, %Y", "%B %d, %Y", "%m-%d-%Y"):
+        try:
+            return dt.datetime.strptime(s, fmt).date()
+        except ValueError:
+            pass
+    return dt.date.min
+
+
 def parse_csv(text):
+    """Return (prices, date_str) for the MOST RECENT row. The TSP feed is not
+    guaranteed to be sorted oldest-last, so we pick by max date rather than by
+    position (a bottom/top row could be the oldest day in the history)."""
     lines = [ln for ln in text.replace("\r", "").split("\n") if ln.strip()]
     if len(lines) < 2:
         return None, None
     hdr = [h.strip().strip('"') for h in lines[0].split(",")]
-    for row in reversed(lines[1:]):
+    best = None  # (date_obj, date_str, prices)
+    for row in lines[1:]:
         cells = [c.strip().strip('"') for c in row.split(",")]
+        if not cells:
+            continue
         prices = {}
         for i, h in enumerate(hdr):
             if i == 0 or i >= len(cells):
@@ -73,8 +92,14 @@ def parse_csv(text):
                 prices[k] = round(float(cells[i].replace("$", "").replace(",", "")), 4)
             except ValueError:
                 pass
-        if prices:
-            return prices, (cells[0] if cells else "")
+        if not prices:
+            continue
+        dstr = cells[0]
+        dobj = parse_date(dstr)
+        if best is None or dobj > best[0]:
+            best = (dobj, dstr, prices)
+    if best:
+        return best[2], best[1]
     return None, None
 
 
