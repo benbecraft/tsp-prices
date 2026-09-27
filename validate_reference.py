@@ -75,6 +75,18 @@ def main():
                     n = new['irs'].get(k)
                     if not (isinstance(n, (int, float)) and o <= n <= o * 1.25):
                         errs.append(f'irs {k} out of range')
+    ra = new.get('raises', {}).get('history', {})
+    for y, v in ra.items():
+        if not (y.isdigit() and isinstance(v, (int, float)) and 0 <= v <= 15):
+            errs.append(f'raises {y} invalid')
+    if old and old.get('raises'):
+        for y, v in old['raises']['history'].items():
+            if ra.get(y) != v:
+                errs.append(f'raises {y} changed or removed (history is append-only)')
+        if mp.get('effective', '') > old['milPay']['effective']:
+            yr = mp['effective'][:4]
+            if mp.get('raisePct') is not None and ra.get(yr) != mp.get('raisePct'):
+                errs.append(f'raises[{yr}] must equal milPay.raisePct')
     if errs:
         print('INVALID:\n  ' + '\n  '.join(errs[:40]))
         sys.exit(1)

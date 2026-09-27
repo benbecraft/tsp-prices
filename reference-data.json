@@ -757,5 +757,31 @@
   "hsaFamily": 8750,
   "hsaCatch": 1000,
   "hsaCatchAge": 55
+ },
+ "raises": {
+  "source": "Annual across-the-board military basic pay raises (militarypay.defense.gov history; 2026 verified against DFAS 2025\u21922026 tables). 2025 excludes the 10% E-1\u2013E-4 targeted raise.",
+  "history": {
+   "2006": 3.1,
+   "2007": 2.2,
+   "2008": 3.5,
+   "2009": 3.9,
+   "2010": 3.4,
+   "2011": 1.4,
+   "2012": 1.6,
+   "2013": 1.7,
+   "2014": 1.0,
+   "2015": 1.0,
+   "2016": 1.3,
+   "2017": 2.1,
+   "2018": 2.4,
+   "2019": 2.6,
+   "2020": 3.1,
+   "2021": 3.0,
+   "2022": 2.7,
+   "2023": 4.6,
+   "2024": 5.2,
+   "2025": 4.5,
+   "2026": 3.8
+  }
  }
 }

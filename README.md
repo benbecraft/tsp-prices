@@ -9,6 +9,7 @@ Values that change on a schedule, read by the app on every launch:
 | `bas` | Basic Allowance for Subsistence (officer / enlisted) | Every January |
 | `va` | VA disability compensation rates by rating and dependents | Every December 1 |
 | `irs` | TSP/401(k), IRA and HSA contribution limits | Every fall |
+| `raises` | History of annual military pay raises (append-only); the app projects pay with its recent average | Every January |
 
 A monthly scheduled task fetches the official sources (the annual pay executive order / DFAS, va.gov, IRS),
 updates only sections with a newer effective date, runs `python3 validate_reference.py reference-data.json`
